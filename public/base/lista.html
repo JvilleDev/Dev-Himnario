@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de cantos</title>
+    <script src="jQuery/jquery-3.7.1.min.js"></script>
+    <link href="css/bootstrap_5-2-3.css" rel="stylesheet">
+    <script src="js/bootstrap.bundle_5-2-3.js"></script>
+    <script src="js/popper.min.js"></script>
+    <link rel="stylesheet" href="fonts/Poppins/poppins.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif !important;
+            overflow-x: hidden;
+        }
+
+        .nav-item {
+            border-radius: 1rem;
+            transition: color ease-in-out 0.2s, background-color ease-in-out 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: #eee;
+        }
+
+        .nav-item.active {
+            background-color: #3458DB;
+        }
+
+        .nav-item.active .nav-link {
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .f-btn {
+            background-color: #fff;
+            color: #000;
+            outline: none;
+            border-radius: 1rem;
+            margin-bottom: 1.2rem;
+            padding: 0.5rem;
+            border: 1px solid white;
+            transform: translateY(0);
+            box-shadow: 0 0 14px -7px;
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .f-btn:hover {
+            transform: translateY(-5px);
+            background-color: #e8edff;
+            color: rgb(0, 55, 156);
+            box-shadow: 0 7px 14px -8px;
+
+        }
+
+        #contenido,
+        #editContenido {
+            height: 40vh;
+            resize: none;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        button {
+            background-color: #3458DB !important;
+            border: 2px solid transparent !important;
+            border-radius: 0.5rem !important;
+            transition: border 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        button:hover {
+            background-color: #fff !important;
+            color: #3458DB !important;
+            border: 2px solid #3458DB !important;
+        }
+
+        .eliminar-canto {
+            background-color: #e63946 !important;
+            border: 2px solid transparent !important;
+            border-radius: 0.5rem !important;
+            transition: border 0.2s ease-in-out, background-color 0.2s ease-in-out;
+        }
+
+        .eliminar-canto:hover {
+            background-color: #fff !important;
+            color: #e63946 !important;
+            border: 2px solid #e63946 !important;
+        }
+
+        button.close {
+            background-color: transparent !important;
+            border: none !important;
+            font-size: 2rem;
+            transition: color 0.2s ease-in-out;
+        }
+
+        button.close:hover {
+            color: #e63946 !important;
+        }
+
+        button.navbar-toggler {
+            background-color: transparent !important;
+            border: none !important;
+        }
+
+        button.navbar-toggler:hover {
+            color: rgba(0, 0, 0, .55) !important;
+            border-color: rgba(0, 0, 0, .1) !important;
+        }
+
+        .actions {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .editar-canto {
+            margin-right: 1rem;
+        }
+        thead {
+      margin-right: 8px;
+    }
+
+    table tr td {
+      width: 25%;
+    }
+
+    tr {
+      width: 100%;
+      display: inline-flex;
+    }
+
+    thead tr th {
+      width: 25%;
+      display: inline-block;
+    }
+    tbody{
+        max-height: 400px;
+        overflow-y: auto;
+        display: block
+    }
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        @media (max-width:1200px) {
+            .nav-link {
+                margin-left: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 1rem;">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">INICIO</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="/lista">MODIFICAR LISTA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ver" target="_blank">VER</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCanto">Agregar</button>
+        <table class="table mt-3">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Tipo</th>
+                    <th>Número</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <div class="t-tb">
+                <tbody id="tablaCantos">
+                </tbody>
+            </div>
+        </table>
+
+        <!-- Modal para agregar -->
+        <div class="modal fade" id="addCanto" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agregar Canto</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Agregar un ID al formulario para referenciarlo en JavaScript -->
+                        <form action="/add" method="POST" id="addCantoForm">
+                            <div class="form-group">
+                                <label for="titulo">Título</label>
+                                <input type="text" class="form-control" id="titulo" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="contenido">Contenido</label>
+                                <textarea class="form-control" id="contenido" name="content" rows="3"
+                                    required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo">Tipo</label>
+                                <select class="form-control" id="tipo" name="type" required>
+                                    <option value="Especial">Especial</option>
+                                    <option value="Congregacional">Congregacional</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero">Número</label>
+                                <input type="number" class="form-control" id="numero" name="nH" min="1" max="999"
+                                    required>
+                            </div>
+                            <button type="button" class="btn btn-primary" id="agregarCanto">Agregar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal de edición de canto -->
+        <div class="modal fade" id="editCanto" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Editar Canto</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editCantoForm">
+                            <div class="form-group">
+                                <label for="editTitulo">Título</label>
+                                <input type="text" class="form-control" id="editTitulo" name="title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="editTipo">Tipo</label>
+                                <select class="form-control" id="editTipo" name="type" required>
+                                    <option value="Especial">Especial</option>
+                                    <option value="Congregacional">Congregacional</option>
+                                    <option value="No aplica">No aplica</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="editContenido">Contenido</label>
+                                <textarea class="form-control" id="editContenido" name="content" rows="3"
+                                    required></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="editNumero">Número</label>
+                                <input type="number" class="form-control" id="editNumero" name="nH" min="1" max="999"
+                                    required>
+                            </div>
+                            <input type="hidden" id="editCantoId" name="id">
+                            <button type="button" class="btn btn-primary" id="guardarEdicion">Guardar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+function cargarCantos() {
+    $.get('/cantos.json', function (cantos) {
+        $('#tablaCantos').empty();
+        const congregacionalCantos = [];
+        const especialCantos = [];
+
+        cantos.forEach(function (canto) {
+            if (canto.type === "Congregacional") {
+                congregacionalCantos.push(canto);
+            } else {
+                especialCantos.push(canto);
+            }
+        });
+        congregacionalCantos.sort((a, b) => a.nH - b.nH);
+        especialCantos.sort((a, b) => a.id - b.id);
+        const cantosOrdenados = [...congregacionalCantos, ...especialCantos];
+        cantosOrdenados.forEach(function (canto) {
+            var fila = $('<tr>');
+            fila.append($('<td>').text(canto.title));
+            fila.append($('<td>').text(canto.type));
+            fila.append($('<td>').text(canto.nH));
+            var acciones = $('<td class="actions">');
+            var editarBtn = $('<button>').text('Editar').addClass('btn btn-primary editar-canto');
+            var eliminarBtn = $('<button>').text('Eliminar').addClass('btn btn-danger eliminar-canto');
+            acciones.append(editarBtn);
+            acciones.append(eliminarBtn);
+            acciones.data('canto', canto);
+            fila.append(acciones);
+            $('#tablaCantos').append(fila);
+        });
+    });
+}
+            cargarCantos();
+            $('#tablaCantos').on('click', '.editar-canto', function () {
+                var canto = $(this).parent().data('canto');
+                $('#editTitulo').val(canto.title);
+                $('#editTipo').val(canto.type);
+                $('#editContenido').val(canto.content);
+                $('#editNumero').val(canto.nH);
+                $('#editCantoId').val(canto.id);
+                $('#editCanto').modal('show');
+            });
+            $('#guardarEdicion').on('click', function () {
+                var formData = $('#editCantoForm').serialize();
+                $.ajax({
+                    type: 'PUT',
+                    url: '/canto/' + $('#editCantoId').val(),
+                    data: formData,
+                    success: function () {
+                        $('#editCantoForm')[0].reset();
+                        $('#editCanto').modal('hide');
+                        cargarCantos();
+                    }
+                });
+            });
+            $('#tablaCantos').on('click', '.eliminar-canto', function () {
+                var canto = $(this).parent().data('canto');
+                $.ajax({
+                    type: 'DELETE',
+                    url: '/canto/' + canto.id,
+                    success: function () {
+                        cargarCantos();
+                    }
+                });
+            });
+
+        $(document).ready(function () {
+            $('#agregarCanto').on('click', function () {
+                var formData = $('#addCantoForm').serialize();
+                $.ajax({
+                    type: 'POST',
+                    url: '/add',
+                    data: formData,
+                    success: function (response) {
+                        $('#addCantoForm')[0].reset();
+                        $('#mensaje').html('<div class="alert alert-success">Canto agregado con éxito.</div>');
+                        $('#addCanto').modal('hide');
+                        cargarCantos();
+                    },
+                    error: function () {
+                        $('#mensaje').html('<div class="alert alert-danger">Ha ocurrido un error.</div>');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+
+</html>

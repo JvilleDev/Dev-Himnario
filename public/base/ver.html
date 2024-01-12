@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Letra</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif !important;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #letra.slide {
+      font-size: 9rem;
+    }
+    #letra {
+      text-align: center;
+      font-size: 3rem;
+      transition: all 0.2s;
+  }
+  .container{
+    transition: all 0.2s ease-in-out;
+  }
+  .bg-l{
+    background-color: darkblue;
+    color: white;
+    border-radius: 2rem;
+    padding: 1rem;
+    border: 2px solid white;
+    transition: all 0.2s ease-in-out;
+  }
+    .container{
+      max-width: 90% !important;
+    }
+    @media (max-width:1200px) {
+      #letra {
+        font-size: 6rem !important;
+      }
+
+      #letra.slide {
+        font-size: 10rem !important;
+      }
+      .form-switch{
+        font-size: 2.5rem;
+        margin: 5rem !important;
+      }
+    }
+  </style>
+  <link href="css/bootstrap_5-2-3.css" rel="stylesheet">
+  <link rel="stylesheet" href="fonts/Poppins/poppins.css">
+</head>
+
+<body>
+  <div class="form-check form-switch"
+    style="display: flex;flex-direction: row;top: 0;left: 0;position: absolute;margin: 1rem;" id="toggleDiv">
+    <input class="form-check-input" type="checkbox" id="toggleSwitch" onchange="toggleSlideClass()">
+    <label class="form-check-label" for="toggleSwitch" style="margin-left: 0.5rem;">Slide Mode</label>
+  </div>
+
+  <div class="container" id="container">
+    <h1 id="letra">
+  </h1>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    let isSlide = false;
+    const socket = io();
+    const letra = document.getElementById('letra')
+    socket.on('connect', () => {
+      console.log('Conectado al servidor');
+    });
+
+    socket.on('Line', (data) => {
+      const letra = document.getElementById('letra');
+      letra.style.opacity = 0;
+      setTimeout(() => {
+        letra.innerHTML = data;
+        letra.style.opacity = 1;
+      }, 200);
+    });
+
+    function toggleSlideClass() {
+      const letraElement = document.getElementById('letra');
+
+      if (letraElement) {
+        isSlide = !isSlide;
+        if (isSlide) {
+          letraElement.classList.add('slide');
+          if (history.pushState) {
+            const newUrl = `${window.location.pathname}?slide=true${window.location.hash}`;
+            history.pushState({ path: newUrl }, '', newUrl);
+          }
+        } else {
+          letraElement.classList.remove('slide');
+          if (history.pushState) {
+            const newUrl = `${window.location.pathname}?slide=false${window.location.hash}`;
+            history.pushState({ path: newUrl }, '', newUrl);
+          }
+        }
+      }
+    }
+
+    function checkQuery() {
+  const currentUrl = window.location.href;
+  const toggleSwitch = document.getElementById('toggleSwitch');
+  const letraElement = document.getElementById('letra');
+  const toggleDiv = document.getElementById('toggleDiv');
+  const container = document.getElementById('container')
+
+  if (currentUrl.includes('hideSwitch=true')) {
+    toggleDiv.style.display = 'none';
+  }
+
+  if (currentUrl.includes('slide=true')) {
+    if (toggleSwitch && letraElement) {
+      toggleSwitch.checked = true;
+      isSlide = true;
+      letraElement.classList.add('slide');
+    }
+  }
+
+  if (currentUrl.includes('bg=true')) {
+    if (letraElement) {
+      container.classList.add('bg-l');
+    }
+  }
+}
+
+checkQuery();
+
+  </script>
+</body>
+
+</html>

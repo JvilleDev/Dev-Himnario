@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Himnario</title>
+    <link href="css/bootstrap_5-2-3.css" rel="stylesheet">
+    <script src="js/bootstrap.bundle_5-2-3.js"></script>
+    <link rel="stylesheet" href="fonts/Poppins/poppins.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .nav-item {
+            border-radius: 1rem;
+            transition: color ease-in-out 0.2s, background-color ease-in-out 0.2s;
+        }
+
+        .nav-item:hover {
+            background-color: #eee;
+        }
+
+        .nav-item.active {
+            background-color: #3458DB;
+        }
+
+        .nav-item.active .nav-link {
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .f-btn {
+            background-color: #fff;
+            color: #000;
+            outline: none;
+            border-radius: 1rem;
+            margin-bottom: 1.2rem;
+            padding: 0.5rem;
+            border: 1px solid white;
+            transform: translateY(0);
+            box-shadow: 0 0 14px -7px;
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
+        }
+
+        .f-btn:hover {
+            transform: translateY(-5px);
+            background-color: #e8edff;
+            color: rgb(0, 55, 156);
+            box-shadow: 0 7px 14px -8px;
+
+        }
+
+        .c-s-l {
+            max-height: 50vh !important;
+            overflow-y: scroll;
+            list-style-type: none;
+            padding: 0.5rem !important;
+        }
+
+        #l-container {
+            scroll-behavior: smooth;
+        }
+
+        #s-container {
+            max-height: 63.5vh !important;
+        }
+
+        #cContainer .c-s-l {
+            padding: 1.5rem !important;
+            background-color: #f6f6f6;
+            border-radius: 0.5rem;
+        }
+
+        .c-s-i {
+            display: block;
+            padding: 0.5rem;
+            border: 2px solid #ddd;
+            margin-bottom: 0.5rem;
+            background-color: #f9f9f9;
+            text-decoration: none;
+            color: inherit;
+            transition: background-color 0.2s, color 0.2s;
+            border-radius: 0.5rem;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .c-s-i:hover {
+            color: black !important;
+            background-color: #eee;
+        }
+
+        .c-s-i.active {
+            outline: none;
+            background-color: #3458DB !important;
+            color: white !important;
+            border: 2px solid white !important;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0px 0px 5px rgba(59, 130, 246, 0.5);
+        }
+
+        .c-line {
+            cursor: pointer;
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            list-style-type: none;
+            border: 2px solid transparent;
+            transition: background-color 0.2s, font-weight 0.2s ease-in-out, color 0.2s ease-in-out, border 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .c-line:hover {
+            background-color: #f8f8f8;
+            color: #000000;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        .c-line.active,
+        .c-line:focus {
+            outline: none;
+            background-color: #e63946 !important;
+            color: white !important;
+            border: 2px solid white !important;
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0px 0px 5px rgba(230, 57, 71, 0.5);
+        }
+
+        .c-t {
+            background-color: #3458DB;
+            color: white !important;
+            padding: 1rem;
+            border-radius: 0.5rem 0.5rem 0 0;
+            margin: 0;
+        }
+
+        .c-t p {
+            font-size: 1rem;
+        }
+
+        .tag {
+            background-color: #facc6b;
+            color: #ffffff;
+            font-weight: bolder;
+        }
+
+        .q-actions {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5rem;
+        }
+
+        .q-actions p {
+            margin-right: 0.5rem;
+            align-items: center;
+            padding: 0.5rem;
+            background-color: #3458DB;
+            color: white !important;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+
+        .q-actions p:hover {
+            background-color: #e63946;
+            box-shadow: 0px 0px 5px rgba(230, 57, 71, 0.5);
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 3s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+
+        @media (max-width:1200px) {
+            .nav-link {
+                margin-left: 0.5rem;
+            }
+        }
+
+        @media (max-width:992px) {
+            .container.d-flex.flex-row {
+                flex-direction: column !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding: 1rem;">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">INICIO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/lista">MODIFICAR LISTA</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ver" target="_blank">VER</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container d-flex flex-row">
+        <div class="container mt-3">
+            <input class="form-control mr-sm-2" type="search" id="bCanto" placeholder="Buscar" aria-label="Search"
+                style="margin-bottom: 0.5rem;">
+            <button class="f-btn" onclick="fetchData()">Actualizar Lista</button>
+            <ul class="c-s-l" id="s-container">
+            </ul>
+        </div>
+        <div id="cContainer" class="container mt-3">
+            <div
+                style="display: flex;flex-direction: column;justify-content: center;align-items: center;text-align: center;">
+                <h3>Seleccione un canto, por favor...</h3>
+                <div class="loader"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="jQuery/jquery-3.7.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        fetchData();
+        let cantos = [];
+        let cantoSeleccionado = false;
+        let selectedIndex = null;
+        let isConnected = false;
+        let cIndex = 0;
+        let cSong = 0;
+        function fetchData() {
+            fetch('/cantos.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    cantos = data;
+                    const listContainer = document.querySelector('.c-s-l');
+                    listContainer.innerHTML = "";
+                    data.forEach(canto => {
+                        const newLi = document.createElement('li');
+                        newLi.classList.add('c-s-i');
+                        newLi.dataset.type = canto.type;
+                        newLi.dataset.id = canto.id;
+                        newLi.dataset.nH = canto.nH;
+                        newLi.textContent = `${canto.nH} - ${canto.title}`;
+                        newLi.addEventListener('click', function () {
+                            document.querySelectorAll('.c-s-i.active').forEach(activeItem => {
+                                activeItem.classList.remove('active');
+                            });
+                            newLi.classList.add('active');
+                            loadCanto(canto.id);
+                        });
+                        listContainer.appendChild(newLi);
+                    });
+                })
+                .catch(error => {
+                    console.error('Hubo un error al obtener los cantos', error);
+                });
+        }
+        socket.on('Song', (data) => {
+            if (data != cSong) {
+                selectSong(data)
+                cSong = parseInt(data);
+            } else {
+                return
+            }
+        })
+        socket.on('Index', (data) => {
+            if (data != cIndex) {
+                changeLine(data)
+            } else {
+                return
+            }
+        })
+        function selectSong(dataId) {
+            let elementos = document.querySelectorAll('.c-s-i');
+            for (let i = 0; i < elementos.length; i++) {
+                if (elementos[i].getAttribute('data-id') == dataId) {
+                    elementos[i].click();
+                    break;
+                }
+            }
+        }
+
+        function loadCanto(cantoId, index) {
+            cIndex = 0;
+            cantoSeleccionado = true;
+            selectedIndex = index;
+            const cContainer = document.getElementById('cContainer');
+            cContainer.innerHTML = '';
+            socket.emit('newSong', cantoId)
+            fetch(`/canto/${cantoId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error en la solicitud');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const contentList = data.content.split('\n');
+                    const titleLine = `#${data.nH} - ${data.title}`;
+                    contentList.unshift(titleLine);
+
+                    const contentHtml = contentList.map((line, index) => {
+                        let lineClass = 'c-line';
+                        if (/^(CORO|\d+|AL FINAL|Pre-CORO|FINAL|AL CORO)\b/i.test(line.trim())) {
+                            lineClass += ' tag';
+                        }
+
+                        return `<li class="${lineClass}" data-index="${index}">${line}</li>`;
+                    }).join('');
+
+                    const actionDiv = document.createElement('div');
+                    actionDiv.classList.add('q-actions');
+                    cContainer.innerHTML = `
+                    <h2 class="c-t">${data.title}<p><span style="font-weight:bold;">&nbsp› Tipo: </span>${data.type}</p><p><span style="font-weight:bold;">&nbsp› Número: </span>${data.nH}</p></h2>
+                    <div class="q-actions"></div>
+                    <ul style="padding:0" class="c-s-l" id="l-container">${contentHtml}</ul>
+                    `;
+
+                    const actionsContainer = document.querySelector('.q-actions');
+                    document.querySelectorAll('.tag').forEach((tag, tagIndex) => {
+                        const pElement = document.createElement('p');
+                        pElement.textContent = tag.textContent;
+                        pElement.addEventListener('click', function () {
+                            changeLine(parseInt(tag.getAttribute('data-index')) + 1);
+                        });
+                        actionsContainer.appendChild(pElement);
+                    });
+                    document.querySelectorAll('.c-line').forEach(line => {
+                        line.addEventListener('click', function () {
+                            const isActive = line.classList.contains('active');
+                            if (!isActive) {
+                                document.querySelectorAll('.c-line.active').forEach(activeLine => {
+                                    activeLine.classList.remove('active');
+                                });
+                                line.classList.add('active');
+                                sendLine(line.textContent);
+                                changeLine(parseInt(line.getAttribute('data-index')));
+                            }
+                        });
+                    });
+                    changeLine(0)
+                })
+                .catch(error => {
+                    console.error('Hubo un error al obtener el canto', error);
+                });
+        }
+        $(document).ready(() => {
+            $('input[type="search"]').on('keyup', function () {
+                const value = $(this).val().toLowerCase();
+                $('li.c-s-i').each(function () {
+                    const text = $(this).text().toLowerCase();
+                    const type = $(this).data('type').toLowerCase();
+                    const nh = $(this).data('nH');
+                    const textMatch = text.indexOf(value) > -1;
+                    const typeMatch = type.indexOf(value) > -1;
+                    const nhMatch = nh.toString().indexOf(value) > -1;
+                    $(this).toggle(textMatch || typeMatch || nhMatch);
+                });
+            });
+        });
+        function sendLine(data) {
+            socket.emit('newLine', data);
+        }
+        function sendIndex(index){
+            socket.emit('newIndex', index)
+        }
+        function changeLine(dataId) {
+            const container = document.getElementById('l-container');
+            const elements = document.querySelectorAll('.c-line[data-index]');
+            let maxValue = 0;
+            elements.forEach(element => {
+                const index = parseInt(element.getAttribute('data-index'));
+                if (!isNaN(index) && index > maxValue) {
+                    maxValue = index;
+                }
+            });
+            dataId = Math.min(maxValue, Math.max(0, dataId));
+            
+            const element = document.querySelector(`.c-line[data-index="${dataId}"]`);
+            const scrollTop = element.offsetTop - container.clientHeight / 1 + element.clientHeight / 2;
+            container.scrollTop = scrollTop;
+            element.click();
+            cIndex = dataId;
+        }
+
+        function cBk(direction) {
+            if (direction === "up") {
+                changeLine(cIndex-1);
+            } else if (direction === "down") {
+                changeLine(cIndex+1);
+            } else {
+                console.error('Dirección no reconocida');
+            }
+        }
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'ArrowUp') {
+                cBk('up');
+            } else if (event.key === 'ArrowDown') {
+                cBk('down');
+            }
+        });
+        document.addEventListener('keydown', function (event) {
+            if ((event.ctrlKey || event.metaKey) && event.key === 'f') {
+                event.preventDefault();
+                document.querySelector('#bCanto').focus();
+            }
+        });
+        $(document).ready(function () {
+            $('#bCanto').on('focus', function () {
+                $(document).on('keydown', function (e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const $firstVisibleCSI = $('.c-s-i:visible').first();
+                        $firstVisibleCSI.click();
+                        $('#bCanto').val('');
+                    }
+                });
+            });
+
+            $('#bCanto').on('blur', function () {
+                $(document).off('keydown');
+            });
+        });
+
+
+    </script>
+
+</body>
+
+</html>
