@@ -102,6 +102,17 @@
         }
       }
     }
+    let switchState = false;
+
+    
+    function toggleSwitch() {
+    const currentUrl = window.location.href;
+    if (currentUrl.includes("hideSwitch")) {
+      switchState = !switchState;
+      checkQuery();
+    }
+}
+
 
     function checkQuery() {
   const currentUrl = window.location.href;
@@ -111,6 +122,7 @@
   const container = document.getElementById('container')
 
   if (currentUrl.includes('hideSwitch=true')) {
+    switchState = true;
     toggleDiv.style.display = 'none';
   }
 
