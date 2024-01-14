@@ -107,7 +107,7 @@
     
     function toggleSwitch() {
     const currentUrl = window.location.href;
-    if (currentUrl.includes("hideSwitch")) {
+    if (currentUrl.includes("hs")) {
       switchState = !switchState;
       checkQuery();
     }
@@ -121,7 +121,7 @@
   const toggleDiv = document.getElementById('toggleDiv');
   const container = document.getElementById('container')
 
-  if (currentUrl.includes('hideSwitch=true')) {
+  if (currentUrl.includes('hs=true')) {
     switchState = true;
     toggleDiv.style.display = 'none';
   }
