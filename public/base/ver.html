@@ -13,28 +13,34 @@
       height: 100vh;
       overflow: hidden;
     }
+
     #letra.slide {
       font-size: 9rem;
     }
+
     #letra {
       text-align: center;
       font-size: 3rem;
       transition: all 0.2s;
-  }
-  .container{
-    transition: all 0.2s ease-in-out;
-  }
-  .bg-l{
-    background-color: darkblue;
-    color: white;
-    border-radius: 2rem;
-    padding: 1rem;
-    border: 2px solid white;
-    transition: all 0.2s ease-in-out;
-  }
-    .container{
+    }
+
+    .container {
+      transition: all 0.2s ease-in-out;
+    }
+
+    .bg-l {
+      background-color: darkblue;
+      color: white;
+      border-radius: 2rem;
+      padding: 1rem;
+      border: 2px solid white;
+      transition: all 0.2s ease-in-out;
+    }
+
+    .container {
       max-width: 90% !important;
     }
+
     @media (max-width:1200px) {
       #letra {
         font-size: 6rem !important;
@@ -43,7 +49,8 @@
       #letra.slide {
         font-size: 10rem !important;
       }
-      .form-switch{
+
+      .form-switch {
         font-size: 2.5rem;
         margin: 5rem !important;
       }
@@ -62,7 +69,7 @@
 
   <div class="container" id="container">
     <h1 id="letra">
-  </h1>
+    </h1>
   </div>
   <script src="/socket.io/socket.io.js"></script>
   <script>
@@ -104,44 +111,44 @@
     }
     let switchState = false;
 
-    
+
     function toggleSwitch() {
-    const currentUrl = window.location.href;
-    if (currentUrl.includes("hs")) {
-      switchState = !switchState;
-      checkQuery();
+      const currentUrl = window.location.href;
+      if (currentUrl.includes("hs")) {
+        switchState = !switchState;
+        checkQuery();
+      }
     }
-}
 
 
     function checkQuery() {
-  const currentUrl = window.location.href;
-  const toggleSwitch = document.getElementById('toggleSwitch');
-  const letraElement = document.getElementById('letra');
-  const toggleDiv = document.getElementById('toggleDiv');
-  const container = document.getElementById('container')
+      const currentUrl = window.location.href;
+      const toggleSwitch = document.getElementById('toggleSwitch');
+      const letraElement = document.getElementById('letra');
+      const toggleDiv = document.getElementById('toggleDiv');
+      const container = document.getElementById('container')
 
-  if (currentUrl.includes('hs=true')) {
-    switchState = true;
-    toggleDiv.style.display = 'none';
-  }
+      if (currentUrl.includes('hs=true')) {
+        switchState = true;
+        toggleDiv.style.display = 'none';
+      }
 
-  if (currentUrl.includes('slide=true')) {
-    if (toggleSwitch && letraElement) {
-      toggleSwitch.checked = true;
-      isSlide = true;
-      letraElement.classList.add('slide');
+      if (currentUrl.includes('slide=true')) {
+        if (toggleSwitch && letraElement) {
+          toggleSwitch.checked = true;
+          isSlide = true;
+          letraElement.classList.add('slide');
+        }
+      }
+
+      if (currentUrl.includes('bg=true')) {
+        if (letraElement) {
+          container.classList.add('bg-l');
+        }
+      }
     }
-  }
 
-  if (currentUrl.includes('bg=true')) {
-    if (letraElement) {
-      container.classList.add('bg-l');
-    }
-  }
-}
-
-checkQuery();
+    checkQuery();
 
   </script>
 </body>
